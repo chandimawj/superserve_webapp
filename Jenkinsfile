@@ -2,18 +2,18 @@ pipeline {
     agent any
 
     stages {
-        stage('Sonarqube Analysis') {
-            steps {
-                echo 'Perform Sonarqube analysis...'
-		        sh './gradlew sonarqube \
-                    -Dsonar.host.url=http://172.31.52.76:9000 \
-                    -Dsonar.login=b024f9f0d3715775cd9085c5d4e046c7d94e9a2d'
-            }
-        }
         stage('Build') {
             steps {
                 echo 'Execute Gradle build...'
-		        sh './gradlew build'
+		sh './gradlew build'
+            }
+        }
+        stage('Sonarqube Analysis') {
+            steps {
+                echo 'Perform Sonarqube analysis...'
+		sh './gradlew sonarqube \
+                    -Dsonar.host.url=http://172.31.52.76:9000 \
+                    -Dsonar.login=b024f9f0d3715775cd9085c5d4e046c7d94e9a2d'
             }
         }
         stage('Run Docker image') {
