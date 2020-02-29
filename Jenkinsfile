@@ -6,7 +6,7 @@ pipeline {
             steps {
                 echo 'Perform Sonarqube analysis...'
 		        sh './gradlew sonarqube \
-                    -Dsonar.host.url=http://master:9000 \
+                    -Dsonar.host.url=http://172.31.52.76:9000 \
                     -Dsonar.login=b024f9f0d3715775cd9085c5d4e046c7d94e9a2d'
             }
         }
