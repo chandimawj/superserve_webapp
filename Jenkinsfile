@@ -9,9 +9,11 @@ pipeline {
             }
         }
         stage('SonarQube analysis') {
-            echo 'Perform code analysis...'
-            withSonarQubeEnv() { 
-                sh './gradlew sonarqube'
+            steps {
+                echo 'Perform code analysis...'
+                withSonarQubeEnv() { 
+                    sh './gradlew sonarqube'
+                }
             }
         }
         stage('Run Docker image') {
