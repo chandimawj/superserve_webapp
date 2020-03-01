@@ -8,12 +8,10 @@ pipeline {
 		sh './gradlew build'
             }
         }
-        stage('Sonarqube Analysis') {
-            steps {
-                echo 'Perform Sonarqube analysis...'
-		sh './gradlew sonarqube \
-                    -Dsonar.host.url=http://172.31.52.76:9000 \
-                    -Dsonar.login=b024f9f0d3715775cd9085c5d4e046c7d94e9a2d'
+        stage('SonarQube analysis') {
+            echo 'Perform code analysis...'
+            withSonarQubeEnv() { 
+                sh './gradlew sonarqube'
             }
         }
         stage('Run Docker image') {
@@ -27,12 +25,12 @@ pipeline {
                 echo 'Execute selenium tests...'
             }
         }
-        stage ('Clean up Docker'){
+        stage ('Clean up container'){
             steps {
                 echo 'Destroy container...'
             }	
         }
-        stage('Publish Image') {
+        stage('Publish image') {
             steps{
                 echo 'Publish image to dockerhub...'
             }
