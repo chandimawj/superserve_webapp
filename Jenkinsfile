@@ -21,7 +21,7 @@ pipeline {
                 echo 'Build Docker Image using Dockerfile...'
                 sh 'sudo docker build -t chandimawj/superserve .'
                 echo 'Execute container...'
-                sh 'sudo docker run -p 3333:8888 chandimawj/superserve'
+                sh 'sudo docker run -d -p 3333:8888 chandimawj/superserve'
             }
         }
         stage('Test') {	   
