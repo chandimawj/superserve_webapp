@@ -12,7 +12,7 @@ pipeline {
             steps {
                 echo 'Perform code analysis...'
                 withSonarQubeEnv('Sonarqube') { 
-                    sh './gradlew sonarqube'
+                    sh './gradlew --stacktrace --info sonarqube'
                 }
             }
         }
