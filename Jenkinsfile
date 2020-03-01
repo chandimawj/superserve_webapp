@@ -16,10 +16,12 @@ pipeline {
                 }
             }
         }
-        stage('Run Docker image') {
+	stage('Run Docker image') {
             steps {
                 echo 'Build Docker Image using Dockerfile...'
+                sh 'docker build -t chandimawj/superserve .'
                 echo 'Execute container...'
+                sh 'docker run -p 3333:8888 chandimawj/superserve'
             }
         }
         stage('Test') {	   
