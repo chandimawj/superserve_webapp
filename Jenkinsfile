@@ -27,6 +27,7 @@ pipeline {
         stage('Test') {	   
             steps {
                 echo 'Execute selenium tests...'
+		build 'superserve-selenium'
             }
         }
         stage ('Clean up container'){
