@@ -27,7 +27,7 @@ pipeline {
                 echo 'Build Docker Image using Dockerfile...'
                 sh "docker build -t $registry:$BUILD_NUMBER ."
                 echo 'Execute container...'
-                sh "docker run -d -p 3333:8888 $registry:$BUILD_NUMBER"
+                sh "docker run --name=test_$BUILD_NUMBER -d -p 3333:8888 $registry:$BUILD_NUMBER"
             }
         }
         stage('Test') {	   
@@ -45,8 +45,8 @@ pipeline {
                     }
                 }
 		echo 'Destroy container...'
-		sh "docker stop ${docker ps -a -q}"
-		sh "docker rm ${docker ps -a -q}"
+		sh "docker stop test_$BUILD_NUMBER"
+		sh "docker rm test_$BUILD_NUMBER"
 		echo 'Remove image...'
 		sh "docker rmi $registry:$BUILD_NUMBER"
             }
