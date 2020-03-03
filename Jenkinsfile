@@ -48,8 +48,8 @@ pipeline {
                     }
                 }
 		echo 'Destroy container...'
-		sh "sudo docker stop $(sudo docker ps -a -q)"
-		sh "sudo docker rm $(sudo docker ps -a -q)"
+		sh "sudo docker stop ${sudo docker ps -a -q}"
+		sh "sudo docker rm ${sudo docker ps -a -q}"
 		echo 'Remove image...'
 		sh "sudo docker rmi $registry:$BUILD_NUMBER"
             }
