@@ -1,4 +1,11 @@
 pipeline {
+	
+    environment {
+        registry = "chandimawj/superserve"
+        registryCredential = 'dockerhub'
+        dockerImage = ''
+    }
+	
     agent any
 
     stages {
@@ -19,9 +26,11 @@ pipeline {
 	stage('Run Docker image') {
             steps {
                 echo 'Build Docker Image using Dockerfile...'
-                sh 'sudo docker build -t chandimawj/superserve .'
+                script {
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                }
                 echo 'Execute container...'
-                sh 'sudo docker run -d -p 3333:8888 chandimawj/superserve'
+                sh "sudo docker run -d -p 3333:8888 $registry:$BUILD_NUMBER"
             }
         }
         stage('Test') {	   
@@ -30,14 +39,19 @@ pipeline {
 		build 'superserve-selenium'
             }
         }
-        stage ('Clean up container'){
-            steps {
-                echo 'Destroy container...'
-            }	
-        }
         stage('Publish image') {
-            steps{
+            steps {
                 echo 'Publish image to dockerhub...'
+		script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
+		echo 'Destroy container...'
+		sh "sudo docker stop $(sudo docker ps -a -q)"
+		sh "sudo docker rm $(sudo docker ps -a -q)"
+		echo 'Remove image...'
+		sh "sudo docker rmi $registry:$BUILD_NUMBER"
             }
         }
         stage('Clean up') {
