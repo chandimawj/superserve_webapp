@@ -2,7 +2,7 @@ pipeline {
 	
     environment {
         registry = "chandimawj/superserve"
-        registryCredential = 'dockerhub'
+        registryCredential = 'd8efea1c-7a7c-413c-bfcb-dc090ace251f'
     }
 	
     agent any
