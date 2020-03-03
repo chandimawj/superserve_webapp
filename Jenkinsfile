@@ -25,9 +25,9 @@ pipeline {
 	stage('Run Docker image') {
             steps {
                 echo 'Build Docker Image using Dockerfile...'
-                sh "sudo docker build -t $registry:$BUILD_NUMBER ."
+                sh "docker build -t $registry:$BUILD_NUMBER ."
                 echo 'Execute container...'
-                sh "sudo docker run -d -p 3333:8888 $registry:$BUILD_NUMBER"
+                sh "docker run -d -p 3333:8888 $registry:$BUILD_NUMBER"
             }
         }
         stage('Test') {	   
@@ -41,14 +41,14 @@ pipeline {
                 echo 'Publish image to dockerhub...'
 		script {
                     docker.withRegistry( '', registryCredential ) {
-                        sh "sudo docker push $registry:$BUILD_NUMBER"
+                        sh "docker push $registry:$BUILD_NUMBER"
                     }
                 }
 		echo 'Destroy container...'
-		sh "sudo docker stop ${sudo docker ps -a -q}"
-		sh "sudo docker rm ${sudo docker ps -a -q}"
+		sh "docker stop ${docker ps -a -q}"
+		sh "docker rm ${docker ps -a -q}"
 		echo 'Remove image...'
-		sh "sudo docker rmi $registry:$BUILD_NUMBER"
+		sh "docker rmi $registry:$BUILD_NUMBER"
             }
         }
         stage('Clean up') {
