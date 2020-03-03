@@ -44,15 +44,15 @@ pipeline {
                         sh "docker push $registry:$BUILD_NUMBER"
                     }
                 }
+            }
+        }
+        stage('Clean up') {
+            steps {
 		echo 'Destroy container...'
 		sh "docker stop test_$BUILD_NUMBER"
 		sh "docker rm test_$BUILD_NUMBER"
 		echo 'Remove image...'
 		sh "docker rmi $registry:$BUILD_NUMBER"
-            }
-        }
-        stage('Clean up') {
-            steps {
                 echo 'Clean up workspace...' 
                 cleanWs()
             }
