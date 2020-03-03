@@ -3,7 +3,6 @@ pipeline {
     environment {
         registry = "chandimawj/superserve"
         registryCredential = 'dockerhub'
-        dockerImage = ''
     }
 	
     agent any
@@ -26,9 +25,7 @@ pipeline {
 	stage('Run Docker image') {
             steps {
                 echo 'Build Docker Image using Dockerfile...'
-                script {
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
-                }
+                sh "sudo docker build -t $registry:$BUILD_NUMBER ."
                 echo 'Execute container...'
                 sh "sudo docker run -d -p 3333:8888 $registry:$BUILD_NUMBER"
             }
@@ -44,7 +41,7 @@ pipeline {
                 echo 'Publish image to dockerhub...'
 		script {
                     docker.withRegistry( '', registryCredential ) {
-                        dockerImage.push()
+                        sh "sudo docker push $registry:$BUILD_NUMBER"
                     }
                 }
 		echo 'Destroy container...'
